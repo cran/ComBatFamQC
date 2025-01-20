@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>ComBatQC</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">ComBatQC</h1>
+
+
+
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The need for larger samples in human subjects research have led to a
+trend of aggregating data across multiple locations (sites). This trend
+is especially prevalent in neuroimaging research. However, while the
+larger samples promoted greater power to detect significant associations
+as well as better generalizability of results, multiple-site study
+designs also introduce heterogeneity in acquisition and processing,
+which might consequently impact study findings.</p>
+<p>ComBat is used as the major harmonization technique in neuroimaging
+and the ComBat Family further extends the original ComBat methodology to
+enable flexible covariate modeling, leveraging efficient R
+implementations of regression models. However, it remains a challenge to
+evaluate potential batch effects as well as the performance of
+harmonization. <code>ComBatFamQC</code> provides a useful visualization
+tool through Rshiny for interactive batch effect diagnostics before and
+after harmonization. To streamline the harmonization process and improve
+efficiency, transparency, and reproducibility, <code>ComBatFamQC</code>
+also provides default harmonization methods by integrating the
+<code>ComBatFamily</code> package.</p>
+<p>The <code>ComBatFamQC</code> visualization includes three key
+functions:</p>
+<ul>
+<li><code>visual_prep</code>: provides all relevant statistical test
+results for batch effect visualization and evaluation.</li>
+<li><code>combat_harm</code>: provides default harmonization methods
+from the ComBatFamily package.</li>
+<li><code>comfam_shiny</code>: generate interactive visualization
+through Rshiny.</li>
+</ul>
+<p>The <code>ComBatFamQC</code> includes the following
+harmonizationmethods:</p>
+<ul>
+<li>ComBat (Johnson et al., 2007)</li>
+<li>ComBat-GAM (Pomponio et al., 2020)</li>
+<li>Longitudinal ComBat (Beer et al., 2020)</li>
+<li>CovBat(Chen et al., 2021)</li>
+</ul>
+</div>
+<div id="set-up" class="section level1">
+<h1>Set up</h1>
+<p>Install the <code>ComBatFamQC</code> package and read in the data set
+to be harmonized. ADNI data is used in the vignette for illustration. To
+be noticed, the data set should include at least the following
+columns:</p>
+<ul>
+<li><strong>batch</strong> column</li>
+<li><strong>feature</strong> columns (make sure univariate column is
+excluded)</li>
+<li><strong>covariate</strong> columns (essential for
+<strong>gam</strong> model)</li>
+<li><strong>random effect</strong> column (essential for
+<strong>lmer</strong> model)</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(ComBatFamQC)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">data</span>(adni)</span></code></pre></div>
+</div>
+<div id="interactive-batch-effect-diagnostics" class="section level1">
+<h1>Interactive Batch Effect Diagnostics</h1>
+<p>Three types of regression models can be considered for batch effect
+evaluation:</p>
+<ul>
+<li><code>lm</code>: Linear regression model, which assumes that the
+relationship between the variables is linear.</li>
+<li><code>gam</code>: Generalized additive model, which models the
+relationship between the dependent variable and certain independent
+variable as a smooth, non-linear function, typically using splines.</li>
+<li><code>lmer</code>: Linear mixed-effects model, which extends the
+linear regression model to account for both fixed effects and random
+effects. It is commonly used in longitudinal datasets.</li>
+</ul>
+<p>(<strong>Note</strong>: For Windows users, make sure to set
+<code>cores = 1</code> in <code>visual_prep</code> function. The MDMR
+test can be time-consuming, especially in large datasets. Users have the
+option to disable the MDMR test by setting
+<code>mdmr = FALSE</code>.)</p>
+<div id="linear-regression-model" class="section level2">
+<h2>Linear Regression Model</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>features <span class="ot">&lt;-</span> <span class="fu">colnames</span>(adni)[<span class="fu">c</span>(<span class="dv">43</span><span class="sc">:</span><span class="dv">104</span>)]</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>covariates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;timedays&quot;</span>, <span class="st">&quot;AGE&quot;</span>, <span class="st">&quot;SEX&quot;</span>, <span class="st">&quot;DIAGNOSIS&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>interaction <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;timedays,DIAGNOSIS&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>batch <span class="ot">&lt;-</span> <span class="st">&quot;manufac&quot;</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>result_orig <span class="ot">&lt;-</span> <span class="fu">visual_prep</span>(<span class="at">type =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="cn">NULL</span>, <span class="at">random =</span> <span class="cn">NULL</span>, <span class="at">df =</span> adni)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">comfam_shiny</span>(result_orig)</span></code></pre></div>
+</div>
+<div id="generalized-additive-model" class="section level2">
+<h2>Generalized additive Model</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>result_gam <span class="ot">&lt;-</span> <span class="fu">visual_prep</span>(<span class="at">type =</span> <span class="st">&quot;gam&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth_int_type =</span> <span class="st">&quot;linear&quot;</span>, <span class="at">smooth =</span> <span class="st">&quot;AGE&quot;</span>, <span class="at">df =</span> adni)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">comfam_shiny</span>(result_gam)</span></code></pre></div>
+</div>
+<div id="linear-mixed-effects-model" class="section level2">
+<h2>Linear Mixed-Effects Model</h2>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>result_lmer <span class="ot">&lt;-</span> <span class="fu">visual_prep</span>(<span class="at">type =</span> <span class="st">&quot;lmer&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="cn">NULL</span>, <span class="at">random =</span> <span class="st">&quot;subid&quot;</span>, <span class="at">df =</span> adni)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">comfam_shiny</span>(result_lmer)</span></code></pre></div>
+</div>
+</div>
+<div id="export-batch-effect-diagnosis-result" class="section level1">
+<h1>Export Batch Effect Diagnosis Result</h1>
+<p>There are two export options: 1) generate a Quarto report (requires
+Quarto to be installed), and 2) generate a combined Excel file.</p>
+<ul>
+<li>Generate a Quarto report</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co">#library(quarto)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>temp_dir <span class="ot">&lt;-</span> <span class="fu">tempfile</span>()</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">dir.create</span>(temp_dir)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">diag_save</span>(<span class="at">path =</span> temp_dir, <span class="at">result =</span> result_lmer, <span class="at">use_quarto =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<ul>
+<li>Generate a combined EXCEL file</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">diag_save</span>(<span class="at">path =</span> temp_dir, <span class="at">result =</span> result_lmer, <span class="at">use_quarto =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+</div>
+<div id="harmonization-using-default-combatfamily-methods" class="section level1">
+<h1>Harmonization Using default ComBatFamily Methods</h1>
+<p>There are two types of harmonization scenarios users can choose
+from:</p>
+<ul>
+<li><strong>First-time Harmonization</strong> (Can also do interactive
+harmonization through Rshiny)</li>
+<li><strong>Out of Sample Harmonization</strong>
+<ul>
+<li>predict from existing ComBat model (works only for <strong>original
+ComBat</strong> and <strong>ComBat-GAM</strong>)</li>
+<li>harmonize new data toward existing reference data (works for all
+built-in ComBat harmonization methods)</li>
+</ul></li>
+</ul>
+<div id="first-time-harmonization" class="section level2">
+<h2>First-time Harmonization</h2>
+<p>Specify parameters carefully based on the harmonization method to be
+applied.</p>
+<div id="original-combat" class="section level3">
+<h3>Original ComBat</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>features <span class="ot">&lt;-</span> <span class="fu">colnames</span>(adni)[<span class="fu">c</span>(<span class="dv">43</span><span class="sc">:</span><span class="dv">104</span>)]</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>covariates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;timedays&quot;</span>, <span class="st">&quot;AGE&quot;</span>, <span class="st">&quot;SEX&quot;</span>, <span class="st">&quot;DIAGNOSIS&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>interaction <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;timedays,DIAGNOSIS&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>batch <span class="ot">&lt;-</span> <span class="st">&quot;manufac&quot;</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="do">## Harmonize using evaluation results as the inputs</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>combat_model <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">result =</span> result_orig, <span class="at">type =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="cn">NULL</span>, <span class="at">random =</span> <span class="cn">NULL</span>, <span class="at">df =</span> adni)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="do">## Harmonize through specifying features, batch, covariates and df arguments</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>combat_model_copy <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">type =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="cn">NULL</span>, <span class="at">random =</span> <span class="cn">NULL</span>, <span class="at">df =</span> adni)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="do">## Expect to get the same harmonization results</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">identical</span>(combat_model<span class="sc">$</span>harmonized_df, combat_model_copy<span class="sc">$</span>harmonized_df)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="co"># save harmonized data</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a><span class="fu">write.csv</span>(combat_model<span class="sc">$</span>harmonized_df, <span class="fu">file.path</span>(temp_dir, <span class="st">&quot;harmonized.csv&quot;</span>))</span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a><span class="co"># save combat model</span></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="fu">saveRDS</span>(combat_model<span class="sc">$</span>combat.object, <span class="fu">file.path</span>(temp_dir, <span class="st">&quot;combat_model.rds&quot;</span>))</span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a><span class="co"># Clean up the temporary file</span></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a><span class="fu">unlink</span>(temp_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+</div>
+<div id="longitudinal-combat" class="section level3">
+<h3>Longitudinal ComBat</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="do">## Harmonize using evaluation results as the inputs</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>combat_model_lmer <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">result =</span> result_lmer, <span class="at">type =</span> <span class="st">&quot;lmer&quot;</span>, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="cn">NULL</span>, <span class="at">random =</span> <span class="st">&quot;subid&quot;</span>, <span class="at">df =</span> adni)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="do">## Harmonize through specifying features, batch, covariates and df arguments</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>combat_model_lmer_copy <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">type =</span> <span class="st">&quot;lmer&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="cn">NULL</span>, <span class="at">random =</span> <span class="st">&quot;subid&quot;</span>, <span class="at">df =</span> adni)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="do">## Expect to get the same harmonization results</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">identical</span>(combat_model_lmer<span class="sc">$</span>harmonized_df, combat_model_lmer_copy<span class="sc">$</span>harmonized_df)</span></code></pre></div>
+</div>
+<div id="combat-gam" class="section level3">
+<h3>ComBat-GAM</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">## Harmonize using evaluation results as the inputs</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>combat_model_gam <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">result =</span> result_gam, <span class="at">type =</span> <span class="st">&quot;gam&quot;</span>, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="st">&quot;AGE&quot;</span>, <span class="at">smooth_int_type =</span> <span class="st">&quot;linear&quot;</span>, <span class="at">df =</span> adni)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="do">## Harmonize through specifying features, batch, covariates and df arguments</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>combat_model_gam_copy <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">type =</span> <span class="st">&quot;gam&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="st">&quot;AGE&quot;</span>, <span class="at">smooth_int_type =</span> <span class="st">&quot;linear&quot;</span>, <span class="at">df =</span> adni)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="do">## Expect to get the same harmonization results</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">identical</span>(combat_model_gam<span class="sc">$</span>harmonized_df, combat_model_gam_copy<span class="sc">$</span>harmonized_df)</span></code></pre></div>
+</div>
+<div id="covbat" class="section level3">
+<h3>CovBat</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="do">## Harmonize using evaluation results as the inputs</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>covbat_model <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">result =</span> result_gam, <span class="at">type =</span> <span class="st">&quot;gam&quot;</span>, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="st">&quot;AGE&quot;</span>, <span class="at">smooth_int_type =</span> <span class="st">&quot;linear&quot;</span>, <span class="at">df =</span> adni, <span class="at">family =</span> <span class="st">&quot;covfam&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="do">## Harmonize through specifying features, batch, covariates and df arguments</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>covbat_model_copy <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">type =</span> <span class="st">&quot;gam&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth_int_type =</span> <span class="st">&quot;linear&quot;</span>, <span class="at">smooth =</span> <span class="st">&quot;AGE&quot;</span>, <span class="at">df =</span> adni, <span class="at">family =</span> <span class="st">&quot;covfam&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="do">## Expect to get the same harmonization results</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">identical</span>(covbat_model<span class="sc">$</span>harmonized_df, covbat_model_copy<span class="sc">$</span>harmonized_df)</span></code></pre></div>
+</div>
+</div>
+<div id="out-of-sample-harmonization" class="section level2">
+<h2>Out of Sample Harmonization</h2>
+<div id="from-combat-model" class="section level3">
+<h3>from ComBat Model</h3>
+<p>Specify <code>predict</code> parameter to be TRUE and
+<code>object</code> parameter to be saved ComBat model.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>saved_model <span class="ot">&lt;-</span> combat_model_gam<span class="sc">$</span>combat.object</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>harm_predict <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">df =</span> adni <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">1000</span>), <span class="at">predict =</span> <span class="cn">TRUE</span>, <span class="at">object =</span> saved_model)</span></code></pre></div>
+</div>
+<div id="from-reference-data" class="section level3">
+<h3>from Reference Data</h3>
+<p>Specify <code>reference</code> parameter to be saved reference data.
+To be noticed, the reference data should have identical columns as the
+new data and the new data should contain reference data as its sub
+sample.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># harmonize reference data</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>reference_site <span class="ot">&lt;-</span> adni <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(site) <span class="sc">%&gt;%</span> <span class="fu">summarize</span>(<span class="at">count =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(count)) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(site) <span class="sc">%&gt;%</span> <span class="fu">head</span>(<span class="dv">30</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>reference_df <span class="ot">&lt;-</span> adni <span class="sc">%&gt;%</span> <span class="fu">filter</span>(site <span class="sc">%in%</span> reference_site)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>features <span class="ot">&lt;-</span> <span class="fu">colnames</span>(reference_df)[<span class="fu">c</span>(<span class="dv">43</span><span class="sc">:</span><span class="dv">104</span>)]</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>covariates <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;timedays&quot;</span>, <span class="st">&quot;AGE&quot;</span>, <span class="st">&quot;SEX&quot;</span>, <span class="st">&quot;DIAGNOSIS&quot;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>interaction <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;timedays,DIAGNOSIS&quot;</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>batch <span class="ot">&lt;-</span> <span class="st">&quot;site&quot;</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>ref_model <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">type =</span> <span class="st">&quot;lmer&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="cn">NULL</span>, <span class="at">random =</span> <span class="st">&quot;subid&quot;</span>, <span class="at">df =</span> reference_df)</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co"># harmonize new data to the reference data</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>harm_new <span class="ot">&lt;-</span> <span class="fu">combat_harm</span>(<span class="at">type =</span> <span class="st">&quot;lmer&quot;</span>, <span class="at">features =</span> features, <span class="at">batch =</span> batch, <span class="at">covariates =</span> covariates, <span class="at">interaction =</span> interaction, <span class="at">smooth =</span> <span class="cn">NULL</span>, <span class="at">random =</span> <span class="st">&quot;subid&quot;</span>, <span class="at">df =</span> adni, <span class="at">reference =</span> ref_model<span class="sc">$</span>harmonized_df)</span></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
