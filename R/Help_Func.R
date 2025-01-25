@@ -660,7 +660,8 @@ interaction_gen <- function(type = "lm", covariates = NULL, smooth = NULL, inter
 
 diag_save <- function(path, result, use_quarto = TRUE){
   quarto_package <- requireNamespace("quarto", quietly = TRUE)
-  if (use_quarto && !is.null(Sys.which("quarto")[[1]]) && quarto_package) {
+  if(quarto_package){quarto_path <- quarto::quarto_path()}else{quarto_path <- NULL}
+  if (use_quarto && !is.null(quarto_path) && quarto_package) {
     original_dir <- getwd()
     template_path <- system.file("quarto_templates/diagnosis_report.qmd", package = "ComBatFamQC")
     new_template_path <- file.path(path, basename(template_path))
@@ -678,6 +679,9 @@ diag_save <- function(path, result, use_quarto = TRUE){
       execute_params = list(data = result)
     )
   }else{
+    if (use_quarto && (!quarto_package || is.null(Sys.which("quarto")[[1]]))) {
+      warning("Quarto CLI or the `quarto` package is not available. Falling back to Excel output.")
+    }
     wb <- createWorkbook()
     header_style <- createStyle(textDecoration = "bold", fgFill = "#D3D3D3", halign = "center")
     addWorksheet(wb, "Batch Summary")
