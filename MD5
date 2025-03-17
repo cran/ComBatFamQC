@@ -1,7 +1,7 @@
-4a2c2f0163aaedeff0ad9c49c3f24a0b *DESCRIPTION
+a55b49a9491add34d4e46c276d086b3b *DESCRIPTION
 da6fd19fa0f7c78b306b26bc1dc99a70 *LICENSE
 117ddf5666ae319585d975f97f03fffd *NAMESPACE
-c20f56903ecf5a5084dee0e27698c57b *NEWS.md
+bf186cebd354a3817bd1e12adab42217 *NEWS.md
 a79683d244167a9b92b206c14d81a624 *R/Harmonization.R
 d931a33b38e48559b212f018598e2b64 *R/Help_Func.R
 2375a21a665d6e9b57b277ca2525d8d8 *R/age_shiny.R
@@ -55,8 +55,8 @@ abdb4dbc4ba0c586a1ce4166ce8f1eca *tests/testthat/previous-results/age_list.rds
 1e1b2b5f75fc2f287b9a39e8b2a172b9 *tests/testthat/previous-results/harm_lm.rds
 3b83b1cab11ea5ed4e8250d7d61200af *tests/testthat/previous-results/lm_result.rds
 64d581bc4ea58efb4c1c4deb5f904324 *tests/testthat/previous-results/result_residual_model_lm.rds
-d2a85c9207562ffab62e92469d9e4902 *tests/testthat/test-age_shiny.R
-6f9ed0a9daa84819e2395b3b809f3f88 *tests/testthat/test-comfam_shiny.R
+bde0efd92a59fffdd7f96996880f820e *tests/testthat/test-age_shiny.R
+3c77255bb3206b5f2894b994bb5608e5 *tests/testthat/test-comfam_shiny.R
 5d054e63cd03b3598ad8711bb00d4682 *tests/testthat/test-harmonization.R
 635bbb67f924285736340e4c2d84494b *tests/testthat/test-help_function.R
 4e0a4da4213148bc7378c89065881858 *tests/testthat/test-residual_gen.R
